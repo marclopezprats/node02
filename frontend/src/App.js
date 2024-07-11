@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     // Realiza la solicitud HTTP al backend
-    axios.get('/api/message')
+    axios.get('/api/message', { withCredentials: true })
       .then(response => {
         setMessage(response.data.message);
       })
@@ -45,6 +45,21 @@ function App() {
             src="/karve/views/home.php"
             data-src="/karve/views/home.php"
             data-src-loading="/karve/views/loading.php"
+            onLoad={(e) => {
+              const iframe = e.target;
+              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+              // Reemplazar URLs dentro del iframe
+              const scripts = iframeDoc.getElementsByTagName('script');
+              for (let script of scripts) {
+                script.src = script.src.replace('https://iframes.karveinformatica.com/AinacarIframe', 'http://localhost/karve');
+              }
+
+              const links = iframeDoc.getElementsByTagName('link');
+              for (let link of links) {
+                link.href = link.href.replace('https://iframes.karveinformatica.com/AinacarIframe', 'http://localhost/karve');
+              }
+            }}
           ></iframe>
         </div>
       </header>
